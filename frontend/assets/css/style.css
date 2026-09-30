@@ -1,0 +1,287 @@
+/* ============================================
+   KSU Smart Parking - Main Styles
+   ============================================ */
+
+:root {
+    --ksu-primary: #1a4d2e;
+    --ksu-secondary: #f0a500;
+    --ksu-dark: #0d2818;
+    --ksu-light: #f8f9fa;
+    --ksu-success: #28a745;
+    --ksu-danger: #dc3545;
+    --ksu-info: #17a2b8;
+}
+
+* {
+    font-family: 'Cairo', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+    background: #f8f9fa;
+}
+
+/* ============ Navbar ============ */
+#mainNavbar {
+    background: rgba(26, 77, 46, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+}
+
+#mainNavbar.scrolled {
+    background: rgba(26, 77, 46, 1);
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    color: #fff !important;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 600;
+    margin: 0 0.5rem;
+    transition: all 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--ksu-secondary) !important;
+}
+
+/* ============ Hero Section ============ */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26, 77, 46, 0.92) 0%, rgba(13, 40, 24, 0.85) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-image {
+    max-height: 450px;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.hero-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+}
+
+.hero-wave svg {
+    display: block;
+    width: 100%;
+    height: 120px;
+}
+
+/* ============ Stats Section ============ */
+.stats-section {
+    margin-top: -60px;
+    position: relative;
+    z-index: 4;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    height: 100%;
+    border-bottom: 4px solid var(--ksu-secondary);
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card h3 {
+    color: var(--ksu-primary);
+    font-size: 2.5rem;
+}
+
+/* ============ Features ============ */
+.feature-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s ease;
+    height: 100%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ============ Visitor Page ============ */
+.parking-map-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.parking-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 15px;
+    background: #f8f9fa;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.parking-row.available {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 2px solid var(--ksu-success);
+}
+
+.parking-row.occupied {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border: 2px solid var(--ksu-danger);
+}
+
+.row-label {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--ksu-primary);
+    background: #fff;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.parking-space {
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: 0.85rem;
+}
+
+.parking-space.available {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.parking-space.occupied {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+}
+
+.parking-space:hover {
+    transform: scale(1.15);
+    z-index: 10;
+}
+
+.parking-space::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.parking-space:hover::after {
+    opacity: 1;
+}
+
+/* ============ Guide Banner ============ */
+.guide-banner {
+    background: linear-gradient(135deg, var(--ksu-primary) 0%, var(--ksu-dark) 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(26, 77, 46, 0.3);
+}
+
+.guide-banner h3 {
+    color: var(--ksu-secondary);
+}
+
+/* ============ Animations ============ */
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+    50% { box-shadow: 0 0 0 15px rgba(40, 167, 69, 0); }
+}
+
+.pulse-green {
+    animation: pulse-green 2s infinite;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+    .hero-section { min-height: 80vh; }
+    .hero-image { max-height: 300px; margin-top: 2rem; }
+    .parking-space { width: 40px; height: 40px; font-size: 0.7rem; }
+    .row-label { width: 35px; height: 35px; font-size: 1rem; }
+    .display-4 { font-size: 2rem; }
+}

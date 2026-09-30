@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSU Visitor Parking - نظام إدارة زوار ومواقف جامعة الملك سعود</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        :root {
+            --ksu-primary: #1a4d2e;
+            --ksu-dark: #0d2818;
+            --ksu-gold: #f0a500;
+            --ksu-light: #f8f9fa;
+        }
+
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* ============ Navbar ============ */
+        #mainNavbar {
+            background: rgba(26, 77, 46, 0.95);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #mainNavbar.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(13, 40, 24, 0.98);
+        }
+
+        .navbar-brand {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #fff !important;
+        }
+
+        .navbar-brand i {
+            color: var(--ksu-gold);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 600;
+            margin: 0 0.3rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--ksu-gold);
+            transition: all 0.3s;
+            transform: translateX(50%);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--ksu-gold) !important;
+        }
+
+        /* ============ Hero ============ */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a4d2e 0%, #0d2818 100%);
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(240, 165, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(240, 165, 0, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title .highlight {
+            color: var(--ksu-gold);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            left: 0;
+            height: 8px;
+            background: rgba(240, 165, 0, 0.3);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.9;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--ksu-gold), #d18e00);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(240, 165, 0, 0.4);
+            color: #fff;
+        }
+
+        .btn-hero-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-hero-outline:hover {
+            background: #fff;
+            color: var(--ksu-primary);
+            border-color: #fff;
+        }
+
+        /* Hero Image */
+        .hero-image-wrapper {
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-image-wrapper img {
+            max-width: 100%;
+            max-height: 500px;
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* ============ Stats ============ */
+        .stats-section {
+            position: relative;
+            margin-top: -80px;
+            z-index: 10;
+            padding-bottom: 4rem;
+        }
+
+        .stat-card-modern {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+            height: 100%;
+            border-top: 5px solid var(--ksu-gold);
+        }
+
+        .stat-card-modern:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            transition: all 0.4s;
+        }
+
+        .stat-card-modern:hover .stat-icon {
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .stat-icon.gold {
+            background: linear-gradient(135deg, #f0a500, #d18e00);
+            color: #fff;
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: #fff;
+        }
+
+        .stat-icon.red {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: #fff;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: #fff;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--ksu-primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* ============ Features ============ */
+        .features-section {
+            padding: 5rem 0;
+            background: var(--ksu-light);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 900;
+            color: var(--ksu-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.4s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ksu-gold), var(--ksu-primary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon-modern {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s;
+        }
+
+        .feature-card:hover .feature-icon-modern {
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .feature-card h4 {
+            font-weight: 800;
+            color: var(--ksu-primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #6c757d;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* ============ How it works ============ */
+        .how-section {
+            padding: 5rem 0;
+            background: #fff;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ksu-primary), var(--ksu-dark));
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px rgba(26, 77, 46, 0.3);
+            position: relative;
+        }
+
+        .step-card h5 {
+            font-weight: 800;
+            color: var(--ksu-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-card p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ============ CTA ============ */
+        .cta-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--ksu-primary), var(--ksu-dark));
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(240, 165, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(240, 165, 0, 0.1) 0%, transparent 50%);
+        }
+
+        .cta-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        /* ============ Footer ============ */
+        footer {
+            background: #0a1f12;
+            color: #fff;
+            padding: 3rem 0 1rem;
+        }
+
+        footer h5 {
+            color: var(--ksu-gold);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        footer p, footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--ksu-gold);
+        }
+
+        footer .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        footer .social-links a:hover {
+            background: var(--ksu-gold);
+            color: #fff;
+        }
+
+        /* ============ Animations ============ */
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse-dot 1.5s infinite;
+            margin-left: 0.5rem;
+        }
+
+        /* ============ Responsive ============ */
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: auto;
+                padding: 120px 0 60px;
+            }
+
+            .hero-image-wrapper img {
+                max-height: 300px;
+                margin-top: 2rem;
+            }
+
+            .stats-section {
+                margin-top: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .step-card {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ Navbar ============ -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-parking fa-2x me-2"></i>
+                <span>KSU Visitor Parking</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="#home">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">عن المشروع</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">الميزات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how">كيف يعمل</a></li>
+                    <li class="nav-item"><a class="nav-link" href="visitor.html">المواقف</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-warning btn-sm ms-2 fw-bold" href="admin/login.html">
+                            <i class="fas fa-sign-in-alt me-1"></i> تسجيل الدخول
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ Hero ============ -->
+    <section class="hero-section" id="home">
+        <div class="container hero-content">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6" data-aos="fade-left">
+                    <span class="badge bg-warning text-dark mb-3 px-3 py-2">
+                        <i class="fas fa-star me-1"></i> نظام ذكي متكامل
+                    </span>
+                    <h1 class="hero-title">
+                        تجربة زيارة <span class="highlight">أذكى وأسهل</span>
+                        <br>لجامعة الملك سعود
+                    </h1>
+                    <p class="hero-subtitle">
+                        نظام إلكتروني متكامل يدير رحلة الزائر كاملة — من تسجيل الزيارة،
+                        الحصول على الموافقة، حجز الموقف، إلى التصريح الإلكتروني بـ QR.
+                        وداعاً للبحث العشوائي عن موقف.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="admin/register.html" class="btn-hero-primary">
+                            <i class="fas fa-user-plus"></i>
+                            ابدأ الآن مجاناً
+                        </a>
+                        <a href="#about" class="btn-hero-outline">
+                            <i class="fas fa-info-circle"></i>
+                            اعرف المزيد
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center" data-aos="fade-right">
+                    <div class="hero-image-wrapper">
+                        <img src="assets/images/hero-bg.jpg" alt="KSU Parking" 
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-car-side text-warning\' style=\'font-size:15rem; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.3));\'></i>';">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Stats ============ -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="zoom-in">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon gold">
+                            <i class="fas fa-parking"></i>
+                        </div>
+                        <div class="stat-value" id="totalSpaces">30</div>
+                        <div class="stat-label">موقف للزوار</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-value text-success" id="availableSpaces">0</div>
+                        <div class="stat-label">موقف متاح</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon red">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-value text-danger" id="occupiedSpaces">0</div>
+                        <div class="stat-label">موقف مشغول</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value">10<span class="fs-5">ث</span></div>
+                        <div class="stat-label">زمن التحديث</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ About ============ -->
+    <section class="features-section" id="about">
+        <div class="container">
+            <div class="text-center" data-aos="fade-up">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2">عن المشروع</span>
+                <h2 class="section-title">ما هو KSU Visitor Parking؟</h2>
+                <p class="section-subtitle">
+                    نظام إلكتروني ذكي متكامل يدير رحلة الزائر كاملة في جامعة الملك سعود
+                </p>
+            </div>
+
+            <div class="row g-4 mt-3">
+                <div class="col-md-6" data-aos="fade-left">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #1a4d2e, #0d2818);">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h4>الهدف من المشروع</h4>
+                        <p>
+                            إنشاء تجربة زيارة أكثر تنظيماً وسهولة وأماناً لزوار جامعة الملك سعود،
+                            وتقليل الازدحام والوقت الذي يضيعه الزوار في البحث عن المواقف،
+                            مع توفير أدوات تساعد إدارة الجامعة والأمن الجامعي على إدارة مواقف
+                            الزوار ومتابعتها بشكل إلكتروني وذكي.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6" data-aos="fade-right">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #f0a500, #d18e00);">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>فكرة المشروع</h4>
+                        <p>
+                            منصة إلكترونية ذكية مخصصة لتنظيم وإدارة مواقف سيارات زوار جامعة الملك سعود.
+                            يهدف النظام إلى تسهيل رحلة الزائر منذ التخطيط للزيارة وحتى مغادرة الجامعة،
+                            من خلال ربط نظام إدارة الزيارات مع نظام حجز وإدارة مواقف السيارات.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Features ============ -->
+    <section class="features-section" id="features" style="background: #fff;">
+        <div class="container">
+            <div class="text-center" data-aos="fade-up">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2">الميزات</span>
+                <h2 class="section-title">لماذا KSU Visitor Parking؟</h2>
+                <p class="section-subtitle">
+                    مميزات تجعل تجربتك أسهل وأسرع وأكثر أماناً
+                </p>
+            </div>
+
+            <div class="row g-4 mt-3">
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #f0a500, #d18e00);">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4>تحديث فوري</h4>
+                        <p>حالة المواقف تتحدث كل 10 ثوانٍ تلقائياً لضمان دقة المعلومات.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h4>حجز مسبق</h4>
+                        <p>احجز موقفك قبل وصولك ووفّر وقتك في البحث عن موقف متاح.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #17a2b8, #138496);">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4>تصريح QR</h4>
+                        <p>تصريح إلكتروني يُستخدم للتحقق من الزيارة عند البوابة بسهولة.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #6f42c1, #5a32a3);">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h4>خريطة مبسطة</h4>
+                        <p>خريطة توضح الصفوف والمناطق المتاحة وتوجهك إلى أفضل موقف.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>آمن وموثوق</h4>
+                        <p>نظام آمن مع مصادقة JWT وتفويض حسب الأدوار وسجلات نشاط.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card">
+                        <div class="feature-icon-modern" style="background: linear-gradient(135deg, #fd7e14, #e36a0a);">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4>إشعارات فورية</h4>
+                        <p>إشعارات فورية عند الموافقة على الزيارة أو تحديث حالة الحجز.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ How it works ============ -->
+    <section class="how-section" id="how">
+        <div class="container">
+            <div class="text-center" data-aos="fade-up">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2">كيف يعمل</span>
+                <h2 class="section-title">رحلة الزائر خطوة بخطوة</h2>
+                <p class="section-subtitle">
+                    5 خطوات بسيطة من تسجيل الزيارة حتى مغادرة الجامعة
+                </p>
+            </div>
+
+            <div class="row g-4 mt-3">
+                <div class="col-md-6 col-lg" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h5>سجّل حسابك</h5>
+                        <p>أنشئ حساباً مجانياً على النظام في أقل من دقيقة.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h5>اطلب زيارة</h5>
+                        <p>املأ نموذج الزيارة وحدد المضيف والتاريخ والوقت.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h5>انتظر الموافقة</h5>
+                        <p>سيتم إشعارك فوراً عند موافقة المضيف على زيارتك.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h5>استلم QR</h5>
+                        <p>ستحصل على تصريح إلكتروني بـ QR Code للدخول.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg" data-aos="fade-up" data-aos-delay="500">
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <h5>ادخل واخرج</h5>
+                        <p>أظهر QR عند البوابة، ثم سجّل خروجك عند المغادرة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center" data-aos="zoom-in">
+                    <h2>جاهز لتجربة زيارة أذكى؟</h2>
+                    <p>انضم الآن إلى KSU Visitor Parking واحجز موقفك في ثوانٍ</p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="admin/register.html" class="btn-hero-primary">
+                            <i class="fas fa-user-plus"></i>
+                            إنشاء حساب مجاني
+                        </a>
+                        <a href="visitor.html" class="btn-hero-outline">
+                            <i class="fas fa-parking"></i>
+                            عرض المواقف
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Footer ============ -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5>
+                        <i class="fas fa-parking me-2"></i>
+                        KSU Visitor Parking
+                    </h5>
+                    <p>
+                        نظام إدارة زوار ومواقف جامعة الملك سعود.
+                        نظام إلكتروني ذكي متكامل يدير رحلة الزائر كاملة.
+                    </p>
+                    <div class="social-links mt-3">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>روابط سريعة</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#home">الرئيسية</a></li>
+                        <li class="mb-2"><a href="#about">عن المشروع</a></li>
+                        <li class="mb-2"><a href="#features">الميزات</a></li>
+                        <li class="mb-2"><a href="visitor.html">المواقف</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>الحساب</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="admin/login.html">تسجيل الدخول</a></li>
+                        <li class="mb-2"><a href="admin/register.html">إنشاء حساب</a></li>
+                        <li class="mb-2"><a href="my-visits.html">زياراتي</a></li>
+                        <li class="mb-2"><a href="my-reservations.html">حجوزاتي</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>تواصل معنا</h5>
+                    <p class="mb-2"><i class="fas fa-envelope me-2"></i> info@ksu.edu.sa</p>
+                    <p class="mb-2"><i class="fas fa-phone me-2"></i> +966 11 000 0000</p>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> الرياض، السعودية</p>
+                </div>
+            </div>
+            <hr class="border-secondary mt-4">
+            <div class="text-center">
+                <p class="mb-0">© 2026 KSU Visitor Parking — جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        // Navbar scroll
+        window.addEventListener("scroll", () => {
+            const nav = document.getElementById("mainNavbar");
+            if (!nav) return;
+            if (window.scrollY > 50) nav.classList.add("scrolled");
+            else nav.classList.remove("scrolled");
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute("href"));
+                if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+        });
+
+        // Stats animation
+        const statAnimations = {};
+
+        function animateStatNumber(elementId, target) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (statAnimations[elementId]) {
+                clearInterval(statAnimations[elementId]);
+                delete statAnimations[elementId];
+            }
+
+            let current = parseInt(el.textContent) || 0;
+            if (current === target) { el.textContent = target; return; }
+
+            const diff = target - current;
+            const step = diff > 0 ? Math.ceil(Math.abs(diff) / 8) : -Math.ceil(Math.abs(diff) / 8);
+
+            statAnimations[elementId] = setInterval(() => {
+                current += step;
+                if ((step > 0 && current >= target) || (step < 0 && current <= target)) {
+                    current = target;
+                    clearInterval(statAnimations[elementId]);
+                    delete statAnimations[elementId];
+                }
+                el.textContent = current;
+            }, 30);
+        }
+
+        async function loadStats() {
+            try {
+                const data = await API.getSpaces();
+                const total = data.spaces.length;
+                const available = data.spaces.filter(s => s.status === "Available").length;
+                const occupied = total - available;
+
+                animateStatNumber("totalSpaces", total);
+                animateStatNumber("availableSpaces", available);
+                animateStatNumber("occupiedSpaces", occupied);
+            } catch (e) {
+                console.error("Stats Error:", e);
+            }
+        }
+
+        loadStats();
+        setInterval(loadStats, 10000);
+    </script>
+</body>
+</html>

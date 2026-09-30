@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجلات النشاط - KSU Smart Parking</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="fas fa-parking"></i>
+                <span>KSU Parking</span>
+            </div>
+        </div>
+        <nav class="nav flex-column mt-3">
+            <a class="nav-link" href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>لوحة التحكم</span>
+            </a>
+            <a class="nav-link" href="users.html">
+                <i class="fas fa-users"></i>
+                <span>إدارة المستخدمين</span>
+            </a>
+            <a class="nav-link active" href="logs.html">
+                <i class="fas fa-clipboard-list"></i>
+                <span>سجلات النشاط</span>
+            </a>
+            <a class="nav-link" href="../visitor.html">
+                <i class="fas fa-parking"></i>
+                <span>عرض المواقف</span>
+            </a>
+            <a class="nav-link" href="../index.html">
+                <i class="fas fa-home"></i>
+                <span>الصفحة الرئيسية</span>
+            </a>
+            <hr class="border-secondary mx-3">
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+        <!-- Topbar -->
+        <div class="admin-topbar">
+            <button class="btn btn-ksu d-lg-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h4 class="mb-0 fw-bold">
+                <i class="fas fa-clipboard-list text-warning me-2"></i>
+                سجلات النشاط
+            </h4>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted d-none d-md-inline">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span id="currentUserName">...</span>
+                </span>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="admin-content">
+
+            <!-- Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="admin-card stat-card-admin">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">إجمالي السجلات</div>
+                                <div class="stat-value" id="totalLogs">0</div>
+                            </div>
+                            <i class="fas fa-clipboard-list fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-card stat-card-admin success">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">عمليات تسجيل الدخول</div>
+                                <div class="stat-value text-success" id="loginLogs">0</div>
+                            </div>
+                            <i class="fas fa-sign-in-alt fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-card stat-card-admin info">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">تحديثات المواقف</div>
+                                <div class="stat-value text-info" id="updateLogs">0</div>
+                            </div>
+                            <i class="fas fa-edit fa-2x text-info"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="admin-card stat-card-admin danger">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">إدارة المستخدمين</div>
+                                <div class="stat-value text-danger" id="userLogs">0</div>
+                            </div>
+                            <i class="fas fa-users-cog fa-2x text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="admin-card mb-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="searchInput"
+                                   placeholder="ابحث في السجلات..."
+                                   onkeyup="filterLogs()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="filterAction" onchange="filterLogs()">
+                            <option value="">كل العمليات</option>
+                            <option value="LOGIN">تسجيل دخول</option>
+                            <option value="LOGOUT">تسجيل خروج</option>
+                            <option value="UPDATE_STATUS">تحديث موقف</option>
+                            <option value="CREATE_USER">إضافة مستخدم</option>
+                            <option value="UPDATE_USER">تعديل مستخدم</option>
+                            <option value="DELETE_USER">حذف مستخدم</option>
+                            <option value="CHANGE_PASSWORD">تغيير كلمة المرور</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="filterLimit" onchange="loadLogs()">
+                            <option value="50">آخر 50</option>
+                            <option value="100" selected>آخر 100</option>
+                            <option value="200">آخر 200</option>
+                            <option value="500">آخر 500</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-ksu w-100" onclick="loadLogs()">
+                            <i class="fas fa-sync-alt me-1"></i> تحديث
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Table -->
+            <div class="admin-card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead style="background: #1a4d2e; color: #fff;">
+                            <tr>
+                                <th>#</th>
+                                <th>المستخدم</th>
+                                <th>العملية</th>
+                                <th>التفاصيل</th>
+                                <th>IP</th>
+                                <th>التاريخ والوقت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="fas fa-spinner fa-spin fa-2x text-warning"></i>
+                                    <p class="mt-2 mb-0">جاري تحميل السجلات...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script>
+    // 🔒 حماية الصفحة — admin فقط
+    if (!protectPage(["admin"], "dashboard.html")) {
+        throw new Error("Access denied");
+    }
+</script>
+<script src="../assets/js/admin.js"></script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = requireAuth();
+        if (!token) return;
+        loadLogs();
+        loadUserInfo();
+    });
+
+    function loadUserInfo() {
+        const user = getCurrentUser();
+        if (user) {
+            const el = document.getElementById("currentUserName");
+            if (el) el.textContent = user.full_name || user.username;
+        }
+    }
+</script>
+</body>
+</html>

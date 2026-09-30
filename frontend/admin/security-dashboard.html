@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الأمن - KSU Visitor Parking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    
+    <style>
+        .scan-box {
+            background: linear-gradient(135deg, #1a4d2e 0%, #0d2818 100%);
+            color: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .scan-input {
+            font-size: 1.5rem;
+            padding: 1rem;
+            text-align: center;
+            letter-spacing: 3px;
+            font-weight: 700;
+            border-radius: 15px;
+            border: 3px solid #f0a500;
+        }
+        .visit-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-right: 5px solid;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+        .visit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .visit-card.approved { border-right-color: #28a745; }
+        .visit-card.completed { border-right-color: #17a2b8; }
+        .stat-mini {
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+        }
+        .stat-mini:hover {
+            transform: translateY(-3px);
+        }
+        .stat-mini .num {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .stat-mini .lbl {
+            color: #6c757d;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+        .result-box {
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .result-box.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            display: block;
+        }
+        .result-box.danger {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>لوحة الأمن</span>
+            </div>
+        </div>
+        <nav class="nav flex-column mt-3">
+            <a class="nav-link active" href="security-dashboard.html">
+                <i class="fas fa-qrcode"></i>
+                <span>التحقق من QR</span>
+            </a>
+            <a class="nav-link" href="../visitor.html">
+                <i class="fas fa-parking"></i>
+                <span>المواقف</span>
+            </a>
+            <a class="nav-link" href="../index.html">
+                <i class="fas fa-home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <hr class="border-secondary mx-3">
+            <a class="nav-link text-danger" href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+        <!-- Topbar -->
+        <div class="admin-topbar">
+            <button class="btn btn-ksu d-lg-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h4 class="mb-0 fw-bold">
+                <i class="fas fa-shield-alt text-warning me-2"></i>
+                لوحة الأمن
+            </h4>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted d-none d-md-inline">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span id="currentUserName">...</span>
+                </span>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="admin-content">
+
+            <!-- Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <i class="fas fa-sign-in-alt fa-2x text-success mb-2"></i>
+                        <div class="num text-success" id="statEntries">0</div>
+                        <div class="lbl">دخول اليوم</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <i class="fas fa-sign-out-alt fa-2x text-info mb-2"></i>
+                        <div class="num text-info" id="statExits">0</div>
+                        <div class="lbl">خروج اليوم</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <i class="fas fa-check-circle fa-2x text-primary mb-2"></i>
+                        <div class="num text-primary" id="statApproved">0</div>
+                        <div class="lbl">تصاريح سارية</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-mini">
+                        <i class="fas fa-list fa-2x text-warning mb-2"></i>
+                        <div class="num text-warning" id="statTotal">0</div>
+                        <div class="lbl">إجمالي اليوم</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Scanner -->
+            <div class="scan-box">
+                <i class="fas fa-qrcode fa-4x mb-3" style="color: #f0a500;"></i>
+                <h3 class="fw-bold mb-3">التحقق من التصريح</h3>
+                <p class="mb-4">امسح QR Code أو أدخل كود الزيارة يدوياً</p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <input type="text" 
+                               class="form-control scan-input mb-3" 
+                               id="permitCode"
+                               placeholder="VIS-XXXXXX"
+                               autofocus>
+                        <button class="btn btn-warning btn-lg w-100 fw-bold" onclick="verifyCode()">
+                            <i class="fas fa-search me-2"></i> التحقق
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div class="result-box" id="resultBox"></div>
+            </div>
+
+            <!-- Today's Logs -->
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-history text-warning me-2"></i>
+                        سجلات اليوم
+                    </h5>
+                    <button class="btn btn-sm btn-ksu-outline" onclick="loadTodayLogs()">
+                        <i class="fas fa-sync-alt me-1"></i> تحديث
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead style="background: #1a4d2e; color: #fff;">
+                            <tr>
+                                <th>#</th>
+                                <th>الزائر</th>
+                                <th>كود الزيارة</th>
+                                <th>العملية</th>
+                                <th>البوابة</th>
+                                <th>الوقت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="fas fa-spinner fa-spin fa-2x text-warning"></i>
+                                    <p class="mt-2 mb-0">جاري التحميل...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/security.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!protectPage(["security", "admin"])) {
+            throw new Error("Access denied");
+        }
+
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById("currentUserName").textContent = user.full_name || user.username;
+        }
+
+        loadTodayLogs();
+    });
+</script>
+</body>
+</html>

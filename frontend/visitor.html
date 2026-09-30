@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المواقف المتاحة - KSU Visitor Parking</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        :root {
+            --ksu-primary: #1a4d2e;
+            --ksu-dark: #0d2818;
+            --ksu-gold: #f0a500;
+        }
+
+        * { font-family: 'Cairo', sans-serif; }
+
+        /* Navbar */
+        #mainNavbar {
+            background: rgba(26, 77, 46, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #fff !important;
+        }
+
+        /* Header */
+        .visitor-header {
+            background: linear-gradient(135deg, var(--ksu-primary), var(--ksu-dark));
+            color: #fff;
+            padding: 4rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visitor-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(240, 165, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(240, 165, 0, 0.1) 0%, transparent 50%);
+        }
+
+        .visitor-header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: #28a745;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        /* Stats */
+        .stats-section {
+            margin-top: -4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card-modern {
+            background: #fff;
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s;
+            height: 100%;
+            border-bottom: 4px solid var(--ksu-gold);
+        }
+
+        .stat-card-modern:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stat-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #fff;
+        }
+
+        /* Guide Banner */
+        .guide-banner-modern {
+            background: linear-gradient(135deg, var(--ksu-primary), var(--ksu-dark));
+            color: #fff;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 15px 40px rgba(26, 77, 46, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-banner-modern::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(240, 165, 0, 0.1);
+            border-radius: 50%;
+        }
+
+        .guide-banner-modern > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Parking Map */
+        .parking-map-wrapper {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parking-map-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('assets/images/map-bg.png');
+            background-size: cover;
+            opacity: 0.03;
+            z-index: 0;
+        }
+
+        .parking-map-wrapper > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .parking-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 16px;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .parking-row.available {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+        }
+
+        .parking-row.occupied {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 2px solid #dc3545;
+        }
+
+        .row-label {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--ksu-primary);
+            background: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .parking-space {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .parking-space.available {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .parking-space.occupied {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .parking-space:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .parking-space::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+
+        .parking-space:hover::after {
+            opacity: 1;
+        }
+
+        /* Legend */
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .legend-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+        }
+
+        /* Info Card */
+        .info-card {
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .parking-space {
+                width: 38px;
+                height: 38px;
+                font-size: 0.7rem;
+            }
+
+            .row-label {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+
+            .parking-row {
+                gap: 6px;
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="assets/images/logo.png" alt="KSU" height="45" class="me-2">
+                <span>KSU Visitor Parking</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <div class="ms-auto d-flex gap-2 flex-wrap">
+                    <a href="index.html" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-home me-1"></i> الرئيسية
+                    </a>
+                    <a href="visitor-visit.html" class="btn btn-warning btn-sm d-none" id="newVisitBtn">
+                        <i class="fas fa-plus me-1"></i> طلب زيارة
+                    </a>
+                    <a href="my-visits.html" class="btn btn-outline-warning btn-sm d-none" id="myVisitsBtn">
+                        <i class="fas fa-calendar-check me-1"></i> زياراتي
+                    </a>
+                    <a href="my-reservations.html" class="btn btn-outline-warning btn-sm d-none" id="myReservationsBtn">
+                        <i class="fas fa-parking me-1"></i> حجوزاتي
+                    </a>
+                    <a href="admin/login.html" class="btn btn-warning btn-sm" id="loginBtnNav">
+                        <i class="fas fa-sign-in-alt me-1"></i> تسجيل الدخول
+                    </a>
+                    <button class="btn btn-outline-danger btn-sm d-none" id="logoutBtnNav" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-1"></i> خروج
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="visitor-header">
+        <div class="container text-center">
+            <span class="badge bg-warning text-dark mb-3 px-3 py-2" data-aos="fade-down">
+                <i class="fas fa-map-marked-alt me-1"></i> خريطة المواقف
+            </span>
+            <h1 class="display-4 fw-bold mb-3" data-aos="fade-down">
+                حالة المواقف <span style="color: var(--ksu-gold);">الآن</span>
+            </h1>
+            <p class="lead mb-0" data-aos="fade-up">
+                يتم التحديث تلقائياً كل 10 ثوانٍ
+            </p>
+            <div class="live-badge" data-aos="zoom-in">
+                <span class="live-dot"></span>
+                <span>مباشر</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="zoom-in">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon-wrapper" style="background: linear-gradient(135deg, #f0a500, #d18e00);">
+                            <i class="fas fa-parking"></i>
+                        </div>
+                        <div class="stat-value" id="totalSpaces">0</div>
+                        <div class="text-muted fw-bold">إجمالي المواقف</div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon-wrapper" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-value text-success" id="availableSpaces">0</div>
+                        <div class="text-muted fw-bold">متاح</div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-card-modern">
+                        <div class="stat-icon-wrapper" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-value text-danger" id="occupiedSpaces">0</div>
+                        <div class="text-muted fw-bold">مشغول</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guide Banner -->
+    <section class="container my-5">
+        <div class="guide-banner-modern" id="guideBanner" data-aos="zoom-in">
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p class="mt-2">جاري التحميل...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guest Info -->
+    <section class="container my-4" id="guestInfo">
+        <div class="info-card" style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); border: 2px solid #17a2b8;">
+            <img src="assets/images/visitor-guide.png" alt="Visitor" width="120">
+            <div class="flex-grow-1">
+                <h5 class="fw-bold mb-2">
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    هل تريد حجز موقف؟
+                </h5>
+                <p class="mb-0 text-muted">
+                    سجّل حساباً مجانياً لحجز موقفك مسبقاً وتوفير وقتك.
+                </p>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="admin/register.html" class="btn btn-warning fw-bold">
+                    <i class="fas fa-user-plus me-1"></i> إنشاء حساب
+                </a>
+                <a href="admin/login.html" class="btn btn-outline-dark fw-bold">
+                    <i class="fas fa-sign-in-alt me-1"></i> تسجيل الدخول
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parking Map -->
+    <section class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="fw-bold mb-0">
+                <i class="fas fa-map text-warning me-2"></i>
+                خريطة المواقف
+            </h2>
+            <div class="d-flex gap-2 flex-wrap">
+                <div class="legend-item">
+                    <img src="assets/images/car-available.png" alt="متاح" width="30" class="me-1">
+                    <span>متاح</span>
+                </div>
+                <div class="legend-item">
+                    <img src="assets/images/car-occupied.png" alt="مشغول" width="30" class="me-1">
+                    <span>مشغول</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="parking-map-wrapper" data-aos="fade-up">
+            <div id="parkingMap">
+                <div class="text-center py-5">
+                    <i class="fas fa-spinner fa-spin fa-3x text-warning"></i>
+                    <p class="mt-3 text-muted">جاري تحميل المواقف...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">
+                        <img src="assets/images/logo.png" alt="KSU" height="35" class="me-2">
+                        KSU Visitor Parking
+                    </h5>
+                    <p class="text-muted">نظام إدارة زوار ومواقف جامعة الملك سعود</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">روابط سريعة</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-muted text-decoration-none">الرئيسية</a></li>
+                        <li class="mb-2"><a href="visitor.html" class="text-muted text-decoration-none">المواقف</a></li>
+                        <li class="mb-2"><a href="admin/login.html" class="text-muted text-decoration-none">تسجيل الدخول</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">تواصل معنا</h5>
+                    <p class="text-muted mb-2"><i class="fas fa-envelope me-2"></i> info@ksu.edu.sa</p>
+                    <p class="text-muted mb-2"><i class="fas fa-phone me-2"></i> +966 11 000 0000</p>
+                </div>
+            </div>
+            <hr class="border-secondary mt-4">
+            <div class="text-center text-muted">
+                <small>© 2026 KSU Visitor Parking — جميع الحقوق محفوظة</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Reservation Modal -->
+    <div class="modal fade" id="reservationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-calendar-plus text-warning me-2"></i>
+                        تأكيد الحجز
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        سيتم إرسال طلبك للموظف لتأكيد الحجز
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">الموقف المحدد:</label>
+                        <div class="p-3 bg-light rounded text-center">
+                            <h3 class="fw-bold text-success mb-0" id="resSpaceCode">-</h3>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">ملاحظات (اختياري):</label>
+                        <textarea class="form-control" id="resNotes" rows="3" 
+                                  placeholder="مثل: سأصل خلال 15 دقيقة..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-warning fw-bold" id="confirmReservationBtn">
+                        <i class="fas fa-check me-2"></i> تأكيد الحجز
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center" style="border-radius: 20px;">
+                <div class="modal-body py-5">
+                    <img src="assets/images/success-icon.png" alt="Success" width="100" class="mb-3">
+                    <h3 class="fw-bold mb-2">تم إنشاء الحجز!</h3>
+                    <p class="text-muted mb-3">في انتظار تأكيد الموظف</p>
+
+                    <div class="p-3 bg-light rounded mb-3">
+                        <small class="text-muted d-block">كود الحجز</small>
+                        <h4 class="fw-bold text-success mb-0" id="successCode">-</h4>
+                    </div>
+
+                    <div class="p-3 bg-light rounded mb-3">
+                        <small class="text-muted d-block">الموقف</small>
+                        <h5 class="fw-bold mb-0" id="successSpace">-</h5>
+                    </div>
+
+                    <a href="my-reservations.html" class="btn btn-ksu w-100 mb-2">
+                        <i class="fas fa-list me-1"></i> عرض حجوزاتي
+                    </a>
+                    <button class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/visitor.js"></script>
+    <script src="assets/js/reservation.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("ksu_token");
+            const user = getCurrentUser();
+            const isLoggedIn = token && isTokenValid();
+
+            const loginBtn = document.getElementById("loginBtnNav");
+            const logoutBtn = document.getElementById("logoutBtnNav");
+            const myResBtn = document.getElementById("myReservationsBtn");
+            const myVisitsBtn = document.getElementById("myVisitsBtn");
+            const newVisitBtn = document.getElementById("newVisitBtn");
+            const guestInfo = document.getElementById("guestInfo");
+
+            if (isLoggedIn && user) {
+                if (loginBtn) loginBtn.classList.add("d-none");
+                if (logoutBtn) logoutBtn.classList.remove("d-none");
+                if (myResBtn) myResBtn.classList.remove("d-none");
+                if (guestInfo) guestInfo.classList.add("d-none");
+
+                if (user.role === "visitor") {
+                    if (myVisitsBtn) myVisitsBtn.classList.remove("d-none");
+                    if (newVisitBtn) newVisitBtn.classList.remove("d-none");
+                }
+            } else {
+                if (loginBtn) loginBtn.classList.remove("d-none");
+                if (logoutBtn) logoutBtn.classList.add("d-none");
+                if (myResBtn) myResBtn.classList.add("d-none");
+                if (myVisitsBtn) myVisitsBtn.classList.add("d-none");
+                if (newVisitBtn) newVisitBtn.classList.add("d-none");
+                if (guestInfo) guestInfo.classList.remove("d-none");
+            }
+        });
+    </script>
+</body>
+</html>

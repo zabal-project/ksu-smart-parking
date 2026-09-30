@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - KSU Visitor Parking</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .register-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خلفية متحركة */
+        .register-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(26, 77, 46, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(240, 165, 0, 0.08) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .register-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1100px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            min-height: 700px;
+            margin: auto;
+        }
+
+        /* الجانب الأيسر - صورة */
+        .register-side {
+            flex: 1;
+            background: linear-gradient(135deg, #1a4d2e 0%, #0d2818 100%);
+            padding: 3rem 2.5rem;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-side::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23f0a500" stroke-opacity="0.1" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="%23f0a500" stroke-opacity="0.1" stroke-width="0.5"/><circle cx="50" cy="50" r="20" fill="none" stroke="%23f0a500" stroke-opacity="0.1" stroke-width="0.5"/></svg>');
+            background-size: cover;
+        }
+
+        .register-side-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .register-side-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: rgba(240, 165, 0, 0.15);
+            border: 2px solid #f0a500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #f0a500;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .register-side h2 {
+            font-weight: 900;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+
+        .register-side p {
+            opacity: 0.85;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .benefits-list {
+            text-align: right;
+            margin-top: 2rem;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .benefits-list i {
+            color: #f0a500;
+            font-size: 1.2rem;
+        }
+
+        /* الجانب الأيمن - النموذج */
+        .register-form-side {
+            flex: 1;
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .register-form-side h3 {
+            font-weight: 900;
+            color: #1a4d2e;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .register-form-side .subtitle {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-floating-custom {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .form-floating-custom label {
+            font-weight: 600;
+            color: #1a4d2e;
+            margin-bottom: 0.4rem;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .form-floating-custom .input-group {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .form-floating-custom .input-group:focus-within {
+            border-color: #f0a500;
+            box-shadow: 0 0 0 4px rgba(240, 165, 0, 0.1);
+        }
+
+        .form-floating-custom .input-group-text {
+            background: #f8f9fa;
+            border: none;
+            color: #6c757d;
+        }
+
+        .form-floating-custom .form-control {
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+        }
+
+        .form-floating-custom .form-control:focus {
+            box-shadow: none;
+        }
+
+        .form-floating-custom .btn-toggle-pass {
+            background: #f8f9fa;
+            border: none;
+            color: #6c757d;
+            padding: 0 1rem;
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #1a4d2e, #0d2818);
+            color: #fff;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-register:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 77, 46, 0.35);
+            color: #f0a500;
+        }
+
+        .btn-register:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: #adb5bd;
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .login-link {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: #1a4d2e;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            color: #f0a500;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .back-home a {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .back-home a:hover {
+            color: #1a4d2e;
+        }
+
+        .password-strength {
+            display: flex;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .strength-bar.active.weak { background: #dc3545; }
+        .strength-bar.active.medium { background: #ffc107; }
+        .strength-bar.active.strong { background: #28a745; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+                max-width: 100%;
+                min-height: auto;
+            }
+
+            .register-side {
+                padding: 2rem 1.5rem;
+            }
+
+            .register-side h2 {
+                font-size: 1.4rem;
+            }
+
+            .register-form-side {
+                padding: 2rem 1.5rem;
+            }
+
+            .register-page {
+                padding: 1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-page">
+    <div class="register-container">
+
+        <!-- الجانب الأيسر -->
+        <div class="register-side">
+            <div class="register-side-content">
+                <div class="register-side-logo">
+                    <i class="fas fa-parking"></i>
+                </div>
+                <h2>KSU Visitor Parking</h2>
+                <p>انضم إلى نظام إدارة زوار ومواقف جامعة الملك سعود</p>
+
+                <ul class="benefits-list list-unstyled">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>حجز موقف مسبقاً</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>طلب زيارة إلكترونية</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>تصريح QR للدخول</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>إشعارات فورية</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>توجيه إلى الموقف</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- الجانب الأيمن - النموذج -->
+        <div class="register-form-side">
+            <h3><i class="fas fa-user-plus text-warning me-2"></i> إنشاء حساب جديد</h3>
+            <p class="subtitle">سجّل كزائر للاستفادة من النظام</p>
+
+            <div id="registerAlert" class="alert d-none" role="alert"></div>
+
+            <form id="registerForm" autocomplete="off">
+
+                <!-- Username -->
+                <div class="form-floating-custom">
+                    <label for="regUsername">
+                        <i class="fas fa-user me-1 text-warning"></i> اسم المستخدم *
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" 
+                               class="form-control" 
+                               id="regUsername"
+                               placeholder="مثال: ahmed2026"
+                               required
+                               minlength="3">
+                    </div>
+                    <div class="form-hint">
+                        <i class="fas fa-info-circle"></i>
+                        3 أحرف على الأقل - باللغة الإنجليزية
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-floating-custom">
+                    <label for="regFullName">
+                        <i class="fas fa-id-card me-1 text-warning"></i> الاسم الكامل
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <input type="text" 
+                               class="form-control" 
+                               id="regFullName"
+                               placeholder="مثال: أحمد محمد">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-floating-custom">
+                    <label for="regEmail">
+                        <i class="fas fa-envelope me-1 text-warning"></i> البريد الإلكتروني
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" 
+                               class="form-control" 
+                               id="regEmail"
+                               placeholder="example@ksu.edu.sa">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-floating-custom">
+                    <label for="regPassword">
+                        <i class="fas fa-lock me-1 text-warning"></i> كلمة المرور *
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" 
+                               class="form-control" 
+                               id="regPassword"
+                               placeholder="6 أحرف على الأقل"
+                               required
+                               minlength="6">
+                        <button type="button" 
+                                class="btn-toggle-pass" 
+                                onclick="togglePassword('regPassword', 'eyeIcon1')">
+                            <i class="fas fa-eye" id="eyeIcon1"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="strengthBars">
+                        <div class="strength-bar"></div>
+                        <div class="strength-bar"></div>
+                        <div class="strength-bar"></div>
+                        <div class="strength-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-floating-custom">
+                    <label for="regPasswordConfirm">
+                        <i class="fas fa-lock me-1 text-warning"></i> تأكيد كلمة المرور *
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" 
+                               class="form-control" 
+                               id="regPasswordConfirm"
+                               placeholder="أعد إدخال كلمة المرور"
+                               required>
+                        <button type="button" 
+                                class="btn-toggle-pass" 
+                                onclick="togglePassword('regPasswordConfirm', 'eyeIcon2')">
+                            <i class="fas fa-eye" id="eyeIcon2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-register" id="registerBtn">
+                    <i class="fas fa-user-plus me-2"></i> إنشاء الحساب
+                </button>
+
+            </form>
+
+            <div class="divider">أو</div>
+
+            <div class="login-link">
+                لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+            </div>
+
+            <div class="back-home">
+                <a href="../index.html">
+                    <i class="fas fa-arrow-right me-1"></i> العودة إلى الصفحة الرئيسية
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script>
+    // مؤشر قوة كلمة المرور
+    document.getElementById("regPassword").addEventListener("input", function() {
+        const password = this.value;
+        const bars = document.querySelectorAll(".strength-bar");
+        
+        bars.forEach(bar => bar.classList.remove("active", "weak", "medium", "strong"));
+
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.length >= 10) strength++;
+        if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+        if (/[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength++;
+
+        const level = strength <= 1 ? "weak" : strength <= 2 ? "medium" : "strong";
+        
+        for (let i = 0; i < strength; i++) {
+            bars[i].classList.add("active", level);
+        }
+    });
+</script>
+</body>
+</html>

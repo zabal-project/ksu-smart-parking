@@ -1,0 +1,361 @@
+/* ============================================
+   KSU Smart Parking - Admin Styles
+   ============================================ */
+
+/* ============ Login Page ============ */
+.admin-login-body {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: #0d2818;
+}
+
+.login-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a4d2e 0%, #0d2818 100%);
+    z-index: 1;
+}
+
+.login-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(240, 165, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(240, 165, 0, 0.1) 0%, transparent 50%);
+}
+
+.login-overlay {
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f0a500" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: bottom;
+    z-index: 2;
+}
+
+.login-card {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-logo {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #1a4d2e, #0d2818);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #f0a500;
+    box-shadow: 0 15px 40px rgba(26, 77, 46, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.login-card .form-control {
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+}
+
+.login-card .form-control:focus {
+    border-color: #f0a500;
+    box-shadow: 0 0 0 0.2rem rgba(240, 165, 0, 0.15);
+}
+
+.login-card .input-group-text {
+    border-radius: 12px 0 0 12px;
+    border: 2px solid #e9ecef;
+    border-left: none;
+    background: #f8f9fa;
+}
+
+.login-card .btn-warning {
+    background: linear-gradient(135deg, #f0a500, #d18e00);
+    border: none;
+    border-radius: 12px;
+    padding: 0.85rem;
+    transition: all 0.3s;
+}
+
+.login-card .btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(240, 165, 0, 0.4);
+}
+
+.demo-info {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-right: 4px solid #f0a500;
+}
+
+/* ============ Admin Layout ============ */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #1a4d2e 0%, #0d2818 100%);
+    color: #fff;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sidebar .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.admin-sidebar .sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.admin-sidebar .sidebar-brand i {
+    color: #f0a500;
+    font-size: 1.8rem;
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+    padding: 0.85rem 1.5rem;
+    border-radius: 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    background: rgba(240, 165, 0, 0.15);
+    color: #f0a500;
+    border-right: 4px solid #f0a500;
+}
+
+.admin-sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.admin-main {
+    margin-right: 260px;
+    flex: 1;
+    background: #f0f2f5;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.admin-topbar {
+    background: #fff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.admin-content {
+    padding: 2rem;
+}
+
+/* ============ Cards ============ */
+.admin-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+    border: none;
+}
+
+.admin-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-admin {
+    border-right: 5px solid #f0a500;
+}
+
+.stat-card-admin.success {
+    border-right-color: #28a745;
+}
+
+.stat-card-admin.danger {
+    border-right-color: #dc3545;
+}
+
+.stat-card-admin.info {
+    border-right-color: #17a2b8;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1a4d2e;
+    line-height: 1;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ============ Tables ============ */
+.admin-table {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.admin-table table {
+    margin-bottom: 0;
+}
+
+.admin-table thead {
+    background: #1a4d2e;
+    color: #fff;
+}
+
+.admin-table thead th {
+    padding: 1rem;
+    font-weight: 700;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.admin-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-color: #f0f0f0;
+}
+
+.admin-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ============ Buttons ============ */
+.btn-ksu {
+    background: #1a4d2e;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-ksu:hover {
+    background: #0d2818;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.btn-ksu-outline {
+    border: 2px solid #1a4d2e;
+    color: #1a4d2e;
+    background: transparent;
+    border-radius: 10px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-ksu-outline:hover {
+    background: #1a4d2e;
+    color: #fff;
+}
+
+/* ============ Badges ============ */
+.badge-role {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.badge-role.admin {
+    background: #dc3545;
+    color: #fff;
+}
+
+.badge-role.staff {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.badge-role.visitor {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        transform: translateX(100%);
+    }
+    
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .admin-main {
+        margin-right: 0;
+    }
+    
+    .login-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .admin-content {
+        padding: 1rem;
+    }
+}
